@@ -31,6 +31,7 @@ Plug 'ziglang/zig.vim'                                    " ZigLang
 "Plug 'zah/nim.vim'                                       " Nim
 Plug 'alaviss/nim.nvim'                                   " Nim (better?)
 Plug 'OmniSharp/omnisharp-vim'                            " C# omnisharp
+Plug 'dart-lang/dart-vim-plugin'                          " Dart/Flutter?
 
 " Visuals and tools
 "Plug 'vim-airline/vim-airline'                         " sexy bottom line - replaced by lightline
@@ -46,7 +47,7 @@ Plug 'cstrahan/vim-capnp'                               " Capnproto highlighting
 
 " Checkers and autocompleters
 Plug 'dense-analysis/ale'                               " Check syntaxes and LSP
-Plug 'prabirshrestha/asyncomplete.vim'                    " Autocomplete for alavaiss/nim/overall?
+Plug 'prabirshrestha/asyncomplete.vim'                  " Autocomplete for alavaiss/nim/overall?
 
 " Colorschemes
 Plug 'NLKNguyen/papercolor-theme'
@@ -360,6 +361,12 @@ let g:ale_fixers.rust = []
 ")
 "EOF
 
+" --------
+"   Dart
+" --------
+
+autocmd FileType dart setlocal tabstop=2 softtabstop=2 shiftwidth=2 textwidth=79 expandtab autoindent fileformat=unix
+autocmd FileType dart call DartToggleFormatOnSave()
 
 " --------
 "   Zig
