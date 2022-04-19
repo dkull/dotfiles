@@ -5,11 +5,6 @@ call plug#begin()
 " NVim specific
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " http://crispgm.com/page/neovim-is-overpowering.html
 Plug 'nvim-treesitter/playground'
-"Plug 'neovim/nvim-lspconfig'
-"Plug 'nvim-lua/lsp_extensions.nvim'
-"Plug 'nvim-lua/completion-nvim'
-
-"Plug 'hrsh7th/nvim-compe'
 
 "Plug 'nvim-lua/popup.nvim'
 "Plug 'nvim-lua/plenary.nvim'
@@ -113,15 +108,15 @@ set updatetime=300   " how long before eg. CursorHold triggers
 " ============
 
 set termguicolors   " 24 bit RGB colors in TUI
-"let g:lightline = { 'colorscheme': 'jellybeans' }
-let g:lightline = {'colorscheme': 'spaceduck' }
-let ayucolor="dark"
 
-"let g:badwolf_darkgutter=1
+let g:lightline = { 'colorscheme': 'jellybeans' }
+"let g:lightline = {'colorscheme': 'spaceduck' }
+let ayucolor="dark"                     " ???
+let g:badwolf_darkgutter=1
 
 " Visual
-"colorscheme ayu                         " is okay
-colorscheme blackbird                         " is okay
+colorscheme ayu                         " is okay
+"colorscheme blackbird                    " is okay
 "colorscheme gruvbox
 "colorscheme PaperColor
 "colorscheme mustang
@@ -139,7 +134,7 @@ colorscheme blackbird                         " is okay
 "colorscheme amora
 
 set background=dark                    " force always dark background
-hi Normal guibg=#050505
+"hi Normal guibg=#050505               " UGLY with themes that set their own BG
 
 ":highlight Normal ctermbg=236          " don't be so dark
 ":highlight NonText ctermbg=236         " don't be so dark
@@ -150,7 +145,7 @@ set guifont=Noto\ Mono\ Regular\ 11
 
 " =================================
 "
-" Keybindings
+" My Custom Keybindings
 "
 " =================================
 
@@ -163,25 +158,17 @@ set guifont=Noto\ Mono\ Regular\ 11
 :nnoremap <A-k> :resize -2<CR>
 :nnoremap <A-j> :resize +2<CR>
 
-" == ALE ==
-":nnoremap <leader>g :ALEGoToDefinition<CR>
-":nnoremap <leader>G :ALEGoToTypeDefinition<CR>
-":nnoremap <leader>r :ALEFindReferences<CR>
-":nnoremap <leader>h :ALEHover<CR>
-":nnoremap <leader>n :ALENext<CR>
+" == ALE  Keys ==
+:nnoremap <leader>d :ALEGoToDefinition<CR>
+:nnoremap <leader>t :ALEGoToTypeDefinition<CR>
+:nnoremap <leader>r :ALEFindReferences<CR>
+:nnoremap <leader>h :ALEHover<CR>
+:nnoremap <leader>n :ALENext<CR>
 
 " Files is from fzf.vim
 :nnoremap <C-p> :Files<CR>
 " Rg is from fzf.vim
-:nnoremap <leader>g :Rg<CR>
-
-":nnoremap <leader>t :lua vim.lsp.buf.hover()<CR>
-":nnoremap <leader>i :lua vim.lsp.buf.implementation()<CR>
-":nnoremap <leader>D :lua vim.lsp.buf.declaration()<CR>
-":nnoremap <leader>d :lua vim.lsp.buf.definition()<CR>
-":nnoremap <leader>r :Telescope lsp_references<CR>
-":nnoremap <leader>s :Telescope lsp_document_symbols<CR>
-":nnoremap <leader>F :Telescope lsp_code_actions<CR>
+:nnoremap <leader>f :Rg<CR>
 
 " ===================
 "
@@ -189,53 +176,18 @@ set guifont=Noto\ Mono\ Regular\ 11
 "
 " ===================
 
-
-" --------
-" NVim LSP
-" --------
-"set omnifunc=v:lua.vim.lsp.omnifunc
-"let g:completion_enable_auto_popup = 1
-"autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
-"autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
-"\ lua require'lsp_extensions'.inlay_hints{ prefix = ' # ', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }
-
-" --------
-" NVim Compe
-" --------
-"let g:compe = {}
-"let g:compe.enabled = v:true
-"let g:compe.autocomplete = v:true
-"let g:compe.debug = v:false
-"let g:compe.min_length = 1
-"let g:compe.preselect = 'enable'
-"let g:compe.throttle_time = 80
-"let g:compe.source_timeout = 200
-"let g:compe.incomplete_delay = 400
-"let g:compe.max_abbr_width = 100
-"let g:compe.max_kind_width = 100
-"let g:compe.max_menu_width = 100
-"let g:compe.documentation = v:true
-"
-"let g:compe.source = {}
-"let g:compe.source.path = v:true
-"let g:compe.source.buffer = v:true
-"let g:compe.source.calc = v:true
-"let g:compe.source.nvim_lsp = v:true
-"let g:compe.source.nvim_lua = v:true
-"let g:compe.source.vsnip = v:true
-"let g:compe.source.ultisnips = v:true
-
-
 " -------
 " asyncomplete
 " -------
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 1
 
-" --------
-"   Ale
-" --------
-"set omnifunc=ale#completion#OmniFunc
+" ------------
+"   Ale Conf
+" ------------
+
+let g:ale_completion_enabled = 1
+set omnifunc=ale#completion#OmniFunc
 
 highlight ALEErrorSign guifg=Red
 highlight ALEWarningSign guifg=Yellow
@@ -287,7 +239,7 @@ au FileType vlang nnoremap <leader>f :%!v fmt %<CR>
 " --------
 let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
 let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
-au filetype go inoremap <buffer> <C-e> :GoErrCheck<CR>
+au FileType go inoremap <buffer> <C-e> :GoErrCheck<CR>
 
 " -------
 " C#
@@ -338,35 +290,17 @@ let g:rustfmt_autosave = 1
 let g:ale_linters.rust = ['clippy', 'cargo']
 let g:ale_fixers.rust = []
 
-"-- Enable rust_analyzer
-"--on_attach=require'completion'.on_attach,
-"lua <<EOF
-"require'lspconfig'.rust_analyzer.setup{ 
-"	settings = {
-"		['rust-analyzer'] = {
-"			checkOnSave = {
-"				command = "clippy"
-"			}
-"		}
-"	}
-"}
-
-"-- Enable diagnostics
-"vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-"  vim.lsp.diagnostic.on_publish_diagnostics, {
-"    virtual_text = true,
-"    signs = true,
-"    update_in_insert = true,
-"  }
-")
-"EOF
-
 " --------
 "   Dart
 " --------
 
 autocmd FileType dart setlocal tabstop=2 softtabstop=2 shiftwidth=2 textwidth=79 expandtab autoindent fileformat=unix
-autocmd FileType dart call DartToggleFormatOnSave()
+let g:ale_fixers.dart = ['dartfmt']
+let g:ale_dart_language_server_executable = '/home/tanel/software/dart-sdk-2.17.0-beta/bin/dart /home/tanel/software/dart-sdk-2.17.0-beta/bin/snapshots/analysis_server.dart.snapshot --lsp'
+
+let g:dart_style_guide = 2
+let g:dart_format_on_save = 1
+"au CursorHold *.dart ALEHover
 
 " --------
 "   Zig
