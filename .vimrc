@@ -7,8 +7,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " http://crispgm.co
 Plug 'nvim-treesitter/playground'
 
 "Plug 'nvim-lua/popup.nvim'
-"Plug 'nvim-lua/plenary.nvim'
-"Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " Languages
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }        " GoLang
@@ -27,18 +27,21 @@ Plug 'ziglang/zig.vim'                                    " ZigLang
 Plug 'alaviss/nim.nvim'                                   " Nim (better?)
 Plug 'OmniSharp/omnisharp-vim'                            " C# omnisharp
 Plug 'dart-lang/dart-vim-plugin'                          " Dart/Flutter?
+Plug 'chazmcgarvey/vim-mermaid'                           " Mermaid highlighting
 
 " Visuals and tools
-"Plug 'vim-airline/vim-airline'                         " sexy bottom line - replaced by lightline
+"Plug 'kien/ctrlp.vim'                                   " hoping to make it work instead of FZF again
+""Plug 'vim-airline/vim-airline'                          " sexy bottom line - replaced by lightline
 Plug 'itchyny/lightline.vim'                            " cute bottom line
 Plug 'scrooloose/nerdtree'                              " file exporer
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " FZF utility
-Plug 'junegunn/fzf.vim'                                 " hopefully better than ctrlp
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " FZF utility
+"Plug 'junegunn/fzf.vim'                                 " hopefully better than ctrlp, hard to configure (opinionated)
 Plug 'majutsushi/tagbar'                                " Shows exuberant-tags
 Plug 'airblade/vim-gitgutter'                           " display git +- in gutter
 Plug 'junegunn/goyo.vim'                                " distraction-free mode
 Plug 'vimwiki/vimwiki'
 Plug 'cstrahan/vim-capnp'                               " Capnproto highlighting
+Plug 'davidhalter/jedi-vim'                             " Python autocomplete
 
 " Checkers and autocompleters
 Plug 'dense-analysis/ale'                               " Check syntaxes and LSP
@@ -79,7 +82,7 @@ let mapleader = ","            " leader key
 set autoindent                 " use current indent on newline
 set backspace=2                " make backspace work (???)
 set cindent                    " indent rules come from C
-set colorcolumn=85             " highlight column
+set colorcolumn=100             " highlight column
 set hlsearch                   " highlight all search results
 set ignorecase                 " do case insensitive search
 set incsearch                  " show incremental search results as you type
@@ -109,14 +112,14 @@ set updatetime=300   " how long before eg. CursorHold triggers
 
 set termguicolors   " 24 bit RGB colors in TUI
 
-let g:lightline = { 'colorscheme': 'jellybeans' }
+"let g:lightline = { 'colorscheme': 'jellybeans' }
 "let g:lightline = {'colorscheme': 'spaceduck' }
 let ayucolor="dark"                     " ???
 let g:badwolf_darkgutter=1
 
 " Visual
-colorscheme ayu                         " is okay
-"colorscheme blackbird                    " is okay
+"colorscheme ayu                         " is okay
+colorscheme blackbird                    " is okay
 "colorscheme gruvbox
 "colorscheme PaperColor
 "colorscheme mustang
@@ -133,7 +136,7 @@ colorscheme ayu                         " is okay
 "colorscheme spaceduck                  " also good
 "colorscheme amora
 
-set background=dark                    " force always dark background
+"set background=dark                    " force always dark background
 "hi Normal guibg=#050505               " UGLY with themes that set their own BG
 
 ":highlight Normal ctermbg=236          " don't be so dark
@@ -149,14 +152,14 @@ set guifont=Noto\ Mono\ Regular\ 11
 "
 " =================================
 
-:nnoremap <C-g> :NERDTreeToggle<CR>
-:nnoremap <C-t> :Tagbar<CR>
-:nnoremap <C-y> :Goyo<CR>
-":nnoremap <C-P> :FZF<CR>
 :nnoremap <A-h> :vertical-resize +2<CR>
 :nnoremap <A-l> :vertical-resize -2<CR>
 :nnoremap <A-k> :resize -2<CR>
 :nnoremap <A-j> :resize +2<CR>
+
+:nnoremap <C-g> :NERDTreeToggle<CR>
+:nnoremap <C-t> :Tagbar<CR>
+:nnoremap <C-y> :Goyo<CR>
 
 " == ALE  Keys ==
 :nnoremap <leader>d :ALEGoToDefinition<CR>
@@ -165,10 +168,19 @@ set guifont=Noto\ Mono\ Regular\ 11
 :nnoremap <leader>h :ALEHover<CR>
 :nnoremap <leader>n :ALENext<CR>
 
-" Files is from fzf.vim
-:nnoremap <C-p> :Files<CR>
-" Rg is from fzf.vim
-:nnoremap <leader>f :Rg<CR>
+" Files/Rg is from fzf.vim
+":nnoremap <leader>ff :Files<CR>
+":nnoremap <leader>fl :Rg<CR>
+":nnoremap <leader>ft :Tags<CR>
+":nnoremap <leader>fb :Buffers<CR>
+
+:nnoremap <leader>fp <cmd>Telescope find_files<CR>
+:nnoremap <C-p> <cmd>Telescope find_files<CR>
+:nnoremap <leader>ff <cmd>Telescope live_grep<CR>
+:nnoremap <C-f> <cmd>Telescope live_grep<CR>
+:nnoremap <leader>fb <cmd>Telescope buffers<CR>
+:nnoremap <leader>ft <cmd>Telescope help_tags<CR>
+
 
 " ===================
 "
@@ -182,22 +194,38 @@ set guifont=Noto\ Mono\ Regular\ 11
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 1
 
+" --------
+" Airline
+" --------
+" some extension are slowing VIM down (https://github.com/vim-airline/vim-airline/issues/421)
+let g:airline#extensions#searchcount#enabled = 0
+let g:airline#extensions#ale#enabled = 0
+
 " ------------
 "   Ale Conf
 " ------------
 
-let g:ale_completion_enabled = 1
 set omnifunc=ale#completion#OmniFunc
+
+let g:airline#extensions#ale#enabled = 1
+
+let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 1
+let g:ale_completions_enabled = 1
+let g:ale_linters = {}
+let g:ale_fixers = {}
+
+let g:ale_floating_preview = 1
+let g:ale_set_balloons=1  " works in GUI
+let g:ale_cursor_detail=1
+
+let g:ale_cache_executable_check_failures=1  " Python tools very slow with '0'
+let g:ale_virtualenv_dir_names = []          " Python still very slow, maybe helps
 
 highlight ALEErrorSign guifg=Red
 highlight ALEWarningSign guifg=Yellow
 let g:ale_sign_error = 'EE'
 let g:ale_sign_warning = 'WW'
-
-let g:ale_fix_on_save = 1
-let g:ale_completions_enabled = 1
-let g:ale_linters = {}
-let g:ale_fixers = {}
 
 " --------
 "   Goyo
@@ -257,10 +285,10 @@ let g:ale_fixers.cs = ['dotnet-format', 'remove_trailing_lines', 'trim_whitespac
 "let g:ale_cs_dotnet_format_options = 'yle'
 let g:OmniSharp_selector_ui = 'fzf'
 
-augroup OmniSharpIntegrations
-  autocmd!
-  autocmd User OmniSharpProjectUpdated,OmniSharpReady call lightline#update()
-augroup END
+"augroup OmniSharpIntegrations
+"  autocmd!
+"  autocmd User OmniSharpProjectUpdated,OmniSharpReady call lightline#update()
+"augroup END
 
 let g:OmniSharp_popup_position = 'peek'
 let g:OmniSharp_popup_options = {'winhl': 'Normal:NormalFloat'}
@@ -271,9 +299,10 @@ let g:OmniSharp_timeout = 10
 " --------
 "  Python
 " --------
-au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
+au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100 expandtab autoindent fileformat=unix
 let python_highlight_all=1
-let g:ale_linters.python = ['mypy', 'pyright', 'vulture']
+"let g:ale_linters.python = ['mypy', 'pyright', 'vulture', 'bandit', 'pylsp']
+let g:ale_linters.python = ['pyright', 'vulture', 'prospector']
 
 " --------
 "   Rust
