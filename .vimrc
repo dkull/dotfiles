@@ -28,6 +28,9 @@ Plug 'alaviss/nim.nvim'                                   " Nim (better?)
 Plug 'OmniSharp/omnisharp-vim'                            " C# omnisharp
 Plug 'dart-lang/dart-vim-plugin'                          " Dart/Flutter?
 Plug 'chazmcgarvey/vim-mermaid'                           " Mermaid highlighting
+Plug 'google/vim-jsonnet'                                 " jsonnet highlight
+Plug 'pearofducks/ansible-vim'                            " Ansible
+Plug 'hashivim/vim-terraform'
 
 " Visuals and tools
 "Plug 'kien/ctrlp.vim'                                   " hoping to make it work instead of FZF again
@@ -67,6 +70,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
 Plug 'owozsh/amora'
 Plug 'blackbirdtheme/vim'
+Plug 'srcery-colors/srcery-vim'
 
 " All of your Plugs must be added before the following line
 call plug#end()
@@ -119,7 +123,7 @@ let g:badwolf_darkgutter=1
 
 " Visual
 "colorscheme ayu                         " is okay
-colorscheme blackbird                    " is okay
+"colorscheme blackbird                    " is okay
 "colorscheme gruvbox
 "colorscheme PaperColor
 "colorscheme mustang
@@ -135,6 +139,7 @@ colorscheme blackbird                    " is okay
 "colorscheme nord
 "colorscheme spaceduck                  " also good
 "colorscheme amora
+colorscheme srcery
 
 "set background=dark                    " force always dark background
 "hi Normal guibg=#050505               " UGLY with themes that set their own BG
@@ -166,7 +171,8 @@ set guifont=Noto\ Mono\ Regular\ 11
 :nnoremap <leader>t :ALEGoToTypeDefinition<CR>
 :nnoremap <leader>r :ALEFindReferences<CR>
 :nnoremap <leader>h :ALEHover<CR>
-:nnoremap <leader>n :ALENext<CR>
+" Jedi hijacks leader+n to show references
+":nnoremap <leader>n :ALENext<CR>
 
 " Files/Rg is from fzf.vim
 ":nnoremap <leader>ff :Files<CR>
@@ -174,9 +180,9 @@ set guifont=Noto\ Mono\ Regular\ 11
 ":nnoremap <leader>ft :Tags<CR>
 ":nnoremap <leader>fb :Buffers<CR>
 
-:nnoremap <leader>fp <cmd>Telescope find_files<CR>
+:nnoremap <leader>ff <cmd>Telescope find_files<CR>
 :nnoremap <C-p> <cmd>Telescope find_files<CR>
-:nnoremap <leader>ff <cmd>Telescope live_grep<CR>
+:nnoremap <leader>fl <cmd>Telescope live_grep<CR>
 :nnoremap <C-f> <cmd>Telescope live_grep<CR>
 :nnoremap <leader>fb <cmd>Telescope buffers<CR>
 :nnoremap <leader>ft <cmd>Telescope help_tags<CR>
@@ -302,7 +308,9 @@ let g:OmniSharp_timeout = 10
 au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100 expandtab autoindent fileformat=unix
 let python_highlight_all=1
 "let g:ale_linters.python = ['mypy', 'pyright', 'vulture', 'bandit', 'pylsp']
-let g:ale_linters.python = ['pyright', 'vulture', 'prospector']
+let g:ale_linters.python = ['pyright', 'vulture']
+
+let g:semshi#update_delay_factor=0.0001  " delay highlight updates (per line of code)
 
 " --------
 "   Rust
